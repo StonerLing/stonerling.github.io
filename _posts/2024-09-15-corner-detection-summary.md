@@ -4,6 +4,7 @@ date: 2024-09-15 21:30:00 +/-0800
 categories: [Computer Vision, Feature] 
 tags: [corner detection]
 author: stoner
+math: true
 ---
 
 ## 0 引言
