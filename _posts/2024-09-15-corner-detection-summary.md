@@ -4,6 +4,7 @@ date: 2024-09-15 21:30:00 +/-0800
 categories: [Computer Vision, Feature] 
 tags: [corner detection]
 author: stoner
+image: /assets/img/computer-vision/feature/corner-detetion-summary.jpg
 math: true
 comments: true
 ---
@@ -39,7 +40,7 @@ $$CRF(x,y)=\min\left\{V_{h},V_{v},V_{d},V_{a}\right\}\tag{1.0.2}$$
 
 ### 1.2 Harris和Shi-Tomasi
 
-Harris算法是对Moravec算法的改进，其所用的**自相关矩阵（auto-correlation matrix）**最早于1981被Lucas、Kanade提出，后来也以类似原理提出**光流（optical flow）。
+Harris算法是对Moravec算法的改进[^1]，其所用的**自相关矩阵（auto-correlation matrix）**最早于1981被Lucas、Kanade提出，后来也以类似原理提出**光流（optical flow）**。
 
 特征点一般用于与另一张图进行匹配，但我们无法预先获知某一点用于匹配时的稳定性，但我们可以判断该点在小范围内的**特异性**，方法如下。
 
@@ -57,7 +58,7 @@ $$\begin{aligned} E_{\mathrm{AC}}(\mathbf x_c,\Delta \mathbf u)& =\sum_{i}w(\mat
  
  $$ \begin{aligned} \mathbf{A}&=\sum_{i}w(\mathbf{x}_{i})[\nabla I(\mathbf{x}_{i})\nabla I(\mathbf{x}_{i})^{T}]\\ &=\begin{bmatrix}\sum w(\mathbf{x}_{i})I_x(\mathbf{x}_{i})^2&\sum w(\mathbf{x}_{i})I_x(\mathbf{x}_{i})I_y(\mathbf{x}_{i})\\\sum w(\mathbf{x}_{i})I_x(\mathbf{x}_{i})I_y(\mathbf{x}_{i})&\sum w(\mathbf{x}_{i})I_y(\mathbf{x}_{i})^2\end{bmatrix}\\ &=w*\begin{bmatrix}I_x^2&&I_xI_y\\I_xI_y&&I_y^2\end{bmatrix} \end{aligned}\tag{1.3} $$
  
-最后一个等式的卷积也不符合严格意义上的常规卷积计算，可以理解成步幅 $$strides=m$$的卷积。 根据Moravec提出的角点定义，角点是在所有方向上灰度变化都很大的点，因此**如果 **$$\mathbf x_c$$** 是角点，对应于 **$$E_{AC}(\mathbf x_c,\Delta \mathbf u)$$** 在 **$$\mathbf x_c$$**处无论 **$$\Delta \mathbf u$$** 取值多少都是一个较大的值。**
+最后一个等式的卷积也不符合严格意义上的常规卷积计算，可以理解成步幅 $$strides=m$$的卷积。 根据Moravec提出的角点定义，角点是在所有方向上灰度变化都很大的点，因此如果 $$\mathbf x_c$$ 是角点，对应于 $$E_{AC}(\mathbf x_c,\Delta \mathbf u)$$ 在 $$\mathbf x_c$$处无论 $$\Delta \mathbf u$$ 取值多少都是一个较大的值。
 
 网上很容易找到以下的描述，用 $$\mathbf{A}$$ 的特征值 $$\lambda_{1,2},\lambda_1\geq\lambda_2$$ 来判断$$\mathbf x_c$$的类型：
 
@@ -74,7 +75,7 @@ $$\begin{aligned} E_{\mathrm{AC}}(\mathbf x_c,\Delta \mathbf u)& =\sum_{i}w(\mat
 
 $$\begin{aligned} \begin{bmatrix}x\\y\end{bmatrix}^T\begin{bmatrix}1/a^2&0\\0&1/b^2\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\mathbf x^T\mathbf B\mathbf  x=1 \end{aligned}\tag{1.4}$$
 
-不难求出 $$\mathbf B$$ 的特征值为 $$\lambda_{2}=1/a^{2},\lambda_{1}=1/b^{2}$$ ，特征向量为 $$\left. \mu_1=\left[\begin{array}{c}1\\0\end{array}\right.\right],\mu_2=\left[\begin{array}{c}0\\1\end{array}\right]$$ ，**椭圆的对称轴和特征向量平行，长轴等于更小的特征值的倒数平方，短轴等于更大的特征值的倒数平方**。对于更一般的椭圆表达式 $$(1.5)$$ 一样有此结论。
+不难求出 $$\mathbf B$$ 的特征值为 $$\lambda_{2}=1/a^{2},\lambda_{1}=1/b^{2}$$ ，特征向量为 $$\left. \mu_1=\left[\begin{array}{c}1\\0\end{array}\right.\right],\mu_2=\left[\begin{array}{c}0\\1\end{array}\right]$$ ，**椭圆的对称轴和特征向量平行，长轴等于更小的特征值的倒数平方，短轴等于更大的特征值的倒数平方**。对于更一般的椭圆表达式 $$(1.5)$$ 一样有此结论[^2]。
 
 $$
 \begin{bmatrix}x\\y\end{bmatrix}^T\begin{bmatrix}a&b\\b&c\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\mathbf x^T\mathbf A\mathbf x=1\tag{1.5}
@@ -82,7 +83,8 @@ $$
 
 现在正式分析。自相关函数 $$E_{\mathrm{AC}}(\Delta\mathbf{u})=\Delta\mathbf{u}^{T}\mathbf{A}\Delta\mathbf{u}$$ ，本质是一个 $$(\Delta x,\Delta y,E)$$ 坐标系下的椭圆锥面。
 
-![](https://pic2.zhimg.com/v2-0adaae78483a72b06e2e031bc9d29413_b.jpg)
+![图1.1 自相关函数是一个椭圆锥面](https://pic2.zhimg.com/v2-0adaae78483a72b06e2e031bc9d29413_b.jpg)
+_图1.1 自相关函数是一个椭圆锥面_
 
 根据角点的自相关函数特征，角点处的 $$E_{\mathrm{AC}}$$ 对所有 $$\Delta\mathbf{u}$$ 都有一个较大的值，那么对应于椭圆锥面的形状就应该是比较“尖”和内缩的。不难想到其水平切面的轮廓是椭圆，形状就应该是比较小且接近于圆形，也即**长轴和短轴都比较短且相近**。我们考虑任意一处 
 
@@ -117,13 +119,14 @@ void cv::goodFeaturesToTrack( InputArray image, OutputArray corners, int maxCorn
 
 ## 2 FAST
 
-FAST算法全称是**Features from Accelerated Segment Test**，直译是加速分段测试特征。初始的FAST算法原理很简单，在论文中占幅不到一页。
+FAST算法全称是**Features from Accelerated Segment Test**，直译是加速分段测试特征。初始的FAST算法原理很简单，在论文中占幅不到一页[^3]。
 
-![](https://pic4.zhimg.com/v2-215964d9773939d907f457d7b54162cf_b.jpg)
+![图2.1 FAST算法原理](https://pic4.zhimg.com/v2-215964d9773939d907f457d7b54162cf_b.jpg)
+_图2.1 FAST算法原理_
 
-对于一个待测点 $$\mathbf x_c$$ ，FAST考虑以 $$\mathbf x_c$$ 为中心半径为3的 $$Bresenham$$ 圆域 $$\mathcal C_{r=3}$$ ，圆域 $$\mathcal C$$ 共计16个像素，把这16个像素代表的方位用1~16的数字标识，记为 $$i\in \{1,2,...,16\}$$ ，对应的像素记为 $$\mathbf x_i \in \{\mathbf x_1,\mathbf x_2,...,\mathbf x_{16}\}$$ 。FAST提出的判准是：**如果在圆域** $$\mathcal C$$ **上存在连续** $$N$$ **个和** $$\mathbf x_c$$ **亮度差异较大的像素，则** $$\mathbf x_c$$ **为角点**。其中 $$N$$ 一般取一个较大的数，比如9或12。而亮度差异则用阈值法衡量，对于圆域 $$\mathcal C$$ 上的像素 $$\mathbf x_i$$ ，如果其满足 $$|I(\mathbf x_i)-I(\mathbf x_c)|>t$$ 则视为亮度差异较大， $$t$$ 一般取20。
+对于一个待测点 $$\mathbf x_c$$ ，FAST考虑以 $$\mathbf x_c$$ 为中心半径为3的 $$Bresenham$$ 圆域 $$\mathcal C_{r=3}$$ ，圆域 $$\mathcal C$$ 共计16个像素，把这16个像素代表的方位用1~16的数字标识，记为 $$i\in \{1,2,...,16\}$$ ，对应的像素记为 $$\mathbf x_i \in \{\mathbf x_1,\mathbf x_2,...,\mathbf x_{16}\}$$ 。FAST提出的判准是：**如果在圆域** $$\mathcal C$$ **上存在连续** $$N$$ **个和** $$\mathbf x_c$$ **亮度差异较大的像素，则** $$\mathbf x_c$$ **为角点**。其中 $$N$$ 一般取一个较大的数，比如9或12。而亮度差异则用阈值法衡量，对于圆域 $$\mathcal C$$ 上的像素 $$\mathbf x_i$$ ，如果其满足 $$\vert I(\mathbf x_i)-I(\mathbf x_c)\vert>t$$ 则视为亮度差异较大， $$t$$ 一般取20。
 
-根据定义满足阈值条件的必需为连续像素，当 $$N=12$$ 时，很显然有一种快速判断 $$\mathbf x_c$$ 不是角点的方法（**High-speed test**）： $$\{\mathbf x_1,\mathbf x_5,\mathbf x_9,\mathbf x_{13}\}$$ 中如果存在3个像素不满足 $$|I(\mathbf x_i)-I(\mathbf x_c)|>t$$ 则 $$\mathbf x_c$$ 不是角点。
+根据定义满足阈值条件的必需为连续像素，当 $$N=12$$ 时，很显然有一种快速判断 $$\mathbf x_c$$ 不是角点的方法（**High-speed test**）： $$\{\mathbf x_1,\mathbf x_5,\mathbf x_9,\mathbf x_{13}\}$$ 中如果存在3个像素不满足 $$\vert I(\mathbf x_i)-I(\mathbf x_c)\vert>t$$ 则 $$\mathbf x_c$$ 不是角点。
 
 论文中指出，FAST计算十分迅速，但是明显存在这些问题： 
 
@@ -144,9 +147,9 @@ $$\left.S_{\mathbf x_c \rightarrow i}=\left\{\begin{array}{ll}d,&\quad I_{\mathb
 
 记**所有训练图像**的**所有像素**的集合为 $$P$$ ，那么对于一个指定的方位 $$i$$ ，我们都能根据公式 $$(2.1)$$ 将 $$P$$ 分为三个子集 $$P_d,P_s,P_b$$ 。
 
-然后根据**ID3算法**最大化**信息增益（Infomation Gain）**生成决策树，也即决策树的每个节点都选择信息增益最大的方位 $$i_m$$ 作为属性，然后以 $$i_m$$ 为参数将输入集继续分为三个子集，接着对子集循环执行上述操作，找信息增益最大的方位 $$i_m'$$ （可以与 $$i_m$$ 相同）、拆分子集......**直到子集的熵为零操作终止，此时所有子集的像素均为同类别**，即都为角点或非角点，至此完成决策树的生成。
+然后根据**ID3算法**[^4]最大化**信息增益（Infomation Gain）**[^5]生成决策树，也即决策树的每个节点都选择信息增益最大的方位 $$i_m$$ 作为属性，然后以 $$i_m$$ 为参数将输入集继续分为三个子集，接着对子集循环执行上述操作，找信息增益最大的方位 $$i_m'$$ （可以与 $$i_m$$ 相同）、拆分子集......**直到子集的熵为零操作终止，此时所有子集的像素均为同类别**，即都为角点或非角点，至此完成决策树的生成。
 
-这里的信息增益 $$H_g(P)$$ 算法如下，首先 $$P$$ 是一个以是非角点划分的二类别像素集，记 $$c=\left|\{p|K_{p} = \mathrm{true}\}\right|$$ 为角点的总数， $$\bar{c}=\left|\{p|K_{p}=\mathrm{false}\}\right|$$ 为非角点的总数，那么 $$P$$ 的信息熵为 
+这里的信息增益 $$H_g(P)$$ 算法如下，首先 $$P$$ 是一个以是非角点划分的二类别像素集，记 $$c=\vert \{p|K_{p} = \mathrm{true}\}\vert$$ 为角点的总数， $$\bar{c}=\vert \{p|K_{p}=\mathrm{false}\}\vert$$ 为非角点的总数，那么 $$P$$ 的信息熵为 
 
 $$H(P)=(c+\bar{c})\log_2(c+\bar{c})-c\log_2c-\bar{c}\log_2\bar{c}\tag{2.2}$$ 这是论文中的写法，乍一看不符合信息熵的公式，稍作变换即可写成频率的形式 $$H(P)=-c\log_2\frac{c}{c+\bar c}-\bar{c}\log_2\frac{\bar c}{c+\bar c}\tag{2.3}$$
 
@@ -154,7 +157,7 @@ $$H(P)=(c+\bar{c})\log_2(c+\bar{c})-c\log_2c-\bar{c}\log_2\bar{c}\tag{2.2}$$ 这
 
 $$H_g(P)=H(P)-H(P_d)-H(P_s)-H(P_b)\tag{2.4}$$
 
-但从信息增益的定义出发，其公式应写为 $$H_g(P)=IG(P,i)=H(P)-\sum_{S_{\mathbf x_c \rightarrow i}\in\{d,s,b\}}\frac{|P_{S_{\mathbf x_c \rightarrow i}}|}{|P|}H\left(P_{S_{\mathbf x_c \rightarrow i}}\right)\tag{2.5}$$ 也即后面三项有一个表示子集元素数量占比的系数，求和项应为 $$P_{S_{\mathbf x_c \rightarrow i}}$$ 的数学期望。
+但从信息增益的定义出发，其公式应写为 $$H_g(P)=IG(P,i)=H(P)-\sum_{S_{\mathbf x_c \rightarrow i}\in\{d,s,b\}}\frac{\vert P_{S_{\mathbf x_c \rightarrow i}}\vert}{\vert P\vert}H\left(P_{S_{\mathbf x_c \rightarrow i}}\right)\tag{2.5}$$ 也即后面三项有一个表示子集元素数量占比的系数，求和项应为 $$P_{S_{\mathbf x_c \rightarrow i}}$$ 的数学期望。
 
 ### 2.# OpenCV API
 
@@ -170,7 +173,7 @@ void cv::FAST(InputArray image, std::vector<KeyPoint> &keypoints, int threshold,
 
 AGAST算法的原理介绍文章在互联网上几乎没有，很多都只是一笔带过直接摆出OpenCV接口。
 
-于是我选择直接阅读AGAST论文。尽管介绍核心原理的部分也比较简短，但我还是研究了好几天，以下是个人理解：
+于是我选择直接阅读AGAST论文[^6]。尽管介绍核心原理的部分也比较简短，但我还是研究了好几天，以下是个人理解：
 
 首先，AGAST（Adaptive and Generic Accelerated Segment Test）算法是FAST算法的改进，全称为自适应和普适性的加速分段测试。**AGAST算法与FAST算法都基于AST的判准，差异只在于决策树的构建上**，不同于FAST需要针对应用场景来选择数据集进行训练，AGAST能够用预先构建好的2棵及以上的决策树对任意场景检测。
 
@@ -212,7 +215,8 @@ $$p_X=\prod\limits_{i=1}^Np_i\quad\text{with}\quad p_i=\begin{cases}1&\text{for}
 
 为了适应不同的应用场景，我们可以选择不同类型的数据集训练得到不同的决策树，比如分别用 $$p_s$$ 比较小的结构性强的图像数据和 $$p_s$$ 比较大的结构性弱的图像数据得到两棵决策树。在具体应用中，利用决策树判断像素类型时，其中一棵决策树到达叶节点后即刻跳转至另一棵决策树的根节点继续判断，由此来实现算法的自适应性，如图3.1所示。
 
-![](https://picx.zhimg.com/v2-8d140f80c5073d5a876b402f86fe8319_b.jpg)
+![图3.1 AGAST算法原理](https://picx.zhimg.com/v2-8d140f80c5073d5a876b402f86fe8319_b.jpg)
+_图3.1 AGAST算法原理_
 
 图中节点颜色越浅表示涌入元素的异质性越强。
 
@@ -230,25 +234,25 @@ void cv::AGAST(InputArray image,std::vector<KeyPoint> &keypoints, int threshold,
 
 **相位一致性（Phase Congruency）**的核心思想在于如下观察：信号在跳变处的各个傅里叶分量相位相近。
 
-![](https://pic3.zhimg.com/v2-b4fe03b7b0171d4b13f0e06fd1c18dee_b.jpg)
+![图4.1 相位一致性](https://pic3.zhimg.com/v2-b4fe03b7b0171d4b13f0e06fd1c18dee_b.jpg)
+_图4.1 相位一致性_
 
+相位一致性也可以理解成，对于一组傅里叶变换后的正弦波，如果在零点（对称中心）处有着越多的同向幅值叠加，会导致这个点的对比度（梯度）越大[^7]。为什么说零点？因为正弦波的零点处的梯度最大。
 
-相位一致性也可以理解成，对于一组傅里叶变换后的正弦波，如果在零点（对称中心）处有着越多的同向幅值叠加，会导致这个点的对比度（梯度）越大。为什么说零点？因为正弦波的零点处的梯度最大。
+![图4.2 相位分解](https://pic1.zhimg.com/v2-b21973e4d8a578dbea01b82f93293abc_b.jpg)
+_图4.2 相位分解_
 
-![](https://pic1.zhimg.com/v2-b21973e4d8a578dbea01b82f93293abc_b.jpg)
-
-
-最初的的相位一致性公式为 $$(4.1)$$ ，式中 $$|E(x)|$$ 是**局部能量（Local Energy）**， $$A_n(x)$$ 是各个傅里叶分量的幅值， $$\overline{\phi}(x)$$ 是加权相位均值，也即“总相位”。
+最初的的相位一致性公式为 $$(4.1)$$ ，式中 $$\vert E(x)\vert$$ 是**局部能量（Local Energy）**， $$A_n(x)$$ 是各个傅里叶分量的幅值， $$\overline{\phi}(x)$$ 是加权相位均值，也即“总相位”。
 
 $$\begin{aligned} PC_1(x)&=\frac{|E(x)|}{\sum_nA_n(x)}\\ &=\frac{\sum_nA_n(\cos(\phi(x)-\overline{\phi}(x))}{\sum_nA_n(x)} \end{aligned}\tag{4.1}$$
 
-很显然， $$PC_1(x)\in [0,1]$$ ，值越大对应于相位一致性越强。为了更好地定位特征并减弱噪声的影响，Kovesi对相位一致性的公式进行了改良
+很显然， $$PC_1(x)\in [0,1]$$ ，值越大对应于相位一致性越强。为了更好地定位特征并减弱噪声的影响，Kovesi[^8]对相位一致性的公式进行了改良
 
 $$PC_{2}(x)=\frac{\sum_{n}W(x)\lfloor A_{n}(x)(\cos(\phi_{n}(x)-\overline{\phi}(x))-|\sin(\phi_{n}(x)-\overline{\phi}(x))|)-T\rfloor}{\sum_{n}A_{n}(x)+\varepsilon}\tag{4.2}$$
 
 公式 $$(4.2)$$ 中， $$W(x)$$ 是空域上的权重函数，对应点的频域范围越大权重越大。 $$\lfloor x\rfloor=\max(0,x)$$ 表示非负函数，有点像DL中的ReLu激活函数， $$\varepsilon$$ 是防止分母为零的极小量，阈值 $$T$$ 用来过滤噪声的影响。
 
-相位一致性的计算公式也可以写为
+相位一致性的计算公式也可以写为[^9]
 
 $$PC(x)=\frac{\sum_nW(x)\lfloor A_n(x)\Delta\Phi_n(x)-T\rfloor}{\sum_nA_n(x)+\epsilon}\tag{4.3}$$
 
@@ -297,7 +301,7 @@ $$
 
 ### 4.# C++ code
 
-code:
+code:[^10]
 
 其中的log-gabor滤波的处理与公式 $$(4.6)$$ 存在细微的差异，角度分量用的是余弦函数而非高斯函数。
 
@@ -385,11 +389,12 @@ $$
 $$
 
 其中，
+
 $$
 \begin{aligned} X_{u}(u,\sigma)&=\frac{\partial}{\partial u}(x(u){\otimes}g(u,\sigma))=x(u){\otimes}g_{u}(u,\sigma)  \\ X_{uu}(u,\sigma) &=\frac{\partial^{2}}{\partial u^{2}}(x(u)\otimes g(u,\sigma)) =x(u)\otimes g_{uu}(u,\sigma) \\ Y_{u}(u,\sigma) &=y(u)\otimes g_{u}(u,\sigma)  \\ Y_{uu}(u,\sigma) &=y(u)\otimes g_{uu}(u,\sigma) \end{aligned}\tag{5.13}
 $$
 
-CSS**算法流程**
+CSS**算法流程**[^11]
 
 1. 使用Canny算子提取边缘
 2. 提取轮廓并且对轮廓预处理：①填补边缘之间的间隙；②找到T型角点并标记
@@ -397,15 +402,16 @@ CSS**算法流程**
 4. 在小尺度中进行角点跟踪
 5. 后处理：融合T型点，移除过于接近的两个角点中的一个
 
-CPDA的算法流程与CSS相近，不同的只有曲率的计算公式，不同于公式 $$(5.12)$$ ，CPDA用的的累计点弦距。计算方式即是给定一个弦长（或者给定弦长的x方向投影长），将这条弦从以右端和待测点重合开始，一直向右滑动直到左端与待测点重合，计算滑动过程中弦对应弧线上的点到弦的垂直距离之和，如图5.1所示。
+CPDA[^12]的算法流程与CSS相近，不同的只有曲率的计算公式，不同于公式 $$(5.12)$$ ，CPDA用的的累计点弦距。计算方式即是给定一个弦长（或者给定弦长的x方向投影长），将这条弦从以右端和待测点重合开始，一直向右滑动直到左端与待测点重合，计算滑动过程中弦对应弧线上的点到弦的垂直距离之和，如图5.1所示。
 
-![](https://pic3.zhimg.com/v2-3c00514c9ed426449d73819687fafa8a_b.jpg)
+![图5.1 CSS算法](https://pic3.zhimg.com/v2-3c00514c9ed426449d73819687fafa8a_b.jpg)
+_图5.1 CSS算法_
 
 ### 5.# MATLAB code
 
-CSS：
+CSS:[^13]
 
-CPDA：
+CPDA:[^14]
 
 
 ---
@@ -418,18 +424,19 @@ CPDA：
 如图6.1所示， $$A$$ 点即为待研究的角点，在局部区域可以视为一个 $$L$$ 型角点， $$O^\prime$$ 为角点邻近区域的一个点， $$AB$$ 、 $$AC$$ 为与与角点 $$A$$ 关联的两条边。为了进一步简化模型，考虑以下灰度分布：即在 $$AB$$ 、 $$AC$$ 两侧的灰度值 $$f(x,y)$$ 分别为 $$a$$ 、 $$b$$ 。
 
 
-![](https://pica.zhimg.com/v2-c1958be3c953424c4f0c1d2d24cd3dd4_b.jpg)
+![图6.1 角点模型](https://pica.zhimg.com/v2-c1958be3c953424c4f0c1d2d24cd3dd4_b.jpg)
+_图6.1 角点模型_
 
 接下来考虑以 $$O^\prime$$ 为中心的角点区域，如图6.2所示，该圆形区域半径为 $$R$$ 。
 
 
-![](https://pic3.zhimg.com/v2-ff2d872c446516cfe621e42965e3bc06_b.jpg)
+![图6.2 角点模型局部](https://pic3.zhimg.com/v2-ff2d872c446516cfe621e42965e3bc06_b.jpg)
+_图6.2 角点模型局部_
 
 为了便于后续计算和分析，将图6.2中的坐标系逆时针旋转 $$\theta$$ 角如图6.3所示。
 
-
-![](https://pica.zhimg.com/v2-7b4f496866a7ae6c52e01a1989497c54_b.jpg)
-
+![图6.3 角点模型局部正规化](https://pica.zhimg.com/v2-7b4f496866a7ae6c52e01a1989497c54_b.jpg)
+_图6.3 角点模型局部正规化_
 
 在图6.3中， $$p$$ 和 $$t$$ 分别是 $$A$$ 和 $$BC$$ 的 $$X$$ 坐标，其中满足 $$AB=AC$$ ，整个半径为 $$R$$ 的区域记为 $$S$$ 。
 
@@ -503,7 +510,7 @@ $$
 (H+J)(2R^2-pt-p^2)=2M_{10}(2R^2-pt-p^2)p\tag{6.11} 
 $$
 
-显然 $$2R^2-pt-p^2\neq 0$$ ，否则 $$|p|=|t|=R$$ ，即 $$S$$ 中无角点。
+显然 $$2R^2-pt-p^2\neq 0$$ ，否则 $$\vert p\vert=\vert t\vert=R$$ ，即 $$S$$ 中无角点。
 
 然后我们得到了想要的角点坐标 $$p$$ ：
 
@@ -530,8 +537,8 @@ $$
 
 ### 6.# Python code
 
-paper:
-code:
+paper:[^15]
+code:[^16]
 
 
 ---
@@ -541,7 +548,7 @@ code:
 
 ### 7.1 定义
 
-FOGDD和SOGDD本质是高斯方向导数滤波。
+FOGDD和SOGDD[^17]本质是高斯方向导数滤波。
 
 在 $$2D$$ 笛卡尔坐标系统中，高斯滤波函数 $$g_\sigma(x,y)$$ 可以表示为： 
 
@@ -614,7 +621,7 @@ $$
 
 ### 7.2 理论溯源
 
-早在1991年William T. Freeman的IEEE论文The Design and Use of Steerable Filters中即给出了名为方向可调滤波（steerable filter）的定义：
+早在1991年William T. Freeman的IEEE论文The Design and Use of Steerable Filters中即给出了名为方向可调滤波（steerable filter）的定义[^18]：
 
 $$
 G_{\hat{\mathbf{u}}}=uG_x+vG_y=u\frac{\partial G}{\partial x}+v\frac{\partial G}{\partial y}\tag{7.12} $$
@@ -625,31 +632,174 @@ $$
 \kappa_{\sigma}(\theta)=\mathbf{\hat{u}}\cdot\nabla(G*f)=\nabla_{\mathbf{\hat{u}}}(G*f)=(\nabla_{\mathbf{\hat{u}}}G)*f\tag{7.13} $$
 
 而二阶高斯方向导数 $$SOGDD$$ 则可定义为：
+
  $$ G_{\hat{\mathbf{u}}\hat{\mathbf{u}}}=u^2G_{xx}+2uvG_{xy}+v^2G_{yy}\tag{7.14} $$
+
 ---
 
 
 ### 8 SuperPoint
 
+SuperPoint[^19]利用由点线面等基本几何要素构成的虚拟数据集进行训练得到伪真值，辅以多样射影变换以提升前者提取的所谓MagicPoint的普适性，以此替代人工标注的过程。这里不对原理做赘述，SuperPoint的网络架构如下图所示：
 
+![图8.1 SuperPoint 编解码架构图](/assets/img/computer-vision/feature/superpoint-decoder.jpg)
+_图8.1 SuperPoint 编解码架构图_
+
+接下来我们重点探讨怎么将官方的预训练模型[^20]在C++中进行调用。有多种推理框架，我们这里以OpenCV的DNN模块为例。首先需要将官方的pth权重文件转换为onnx格式[^21]，接下来就是读取这个onnx文件，进行模型推理，根据论文以及官方python代码从推理结果中提取角点特征。
+
+一张灰度图经过推理后会生成两个张量，注意这个张量相比原图在长和宽的大小上变成了原本的1/8，这一点会体现在坐标的转换上。然后就是很常规的置信度阈值提取角点坐标，双线性内插获取角点描述子，具体的C++代码如下所示，其中`SuperPoint_Impl`是`SuperPoint`的实现类，`cv::Feature2D`的子类。
+
+```cpp
+void cv::SuperPoint_Impl::detectAndCompute(InputArray _image, InputArray _mask, std::vector<KeyPoint>& keypoints,
+                                           OutputArray _descriptors, bool use_provided_keypoints)
+{
+    // 0.prepare
+    bool do_keypoints = !use_provided_keypoints;
+    bool do_descriptors = _descriptors.needed();
+
+    cv::Mat image = _image.getMat(), mask = _mask.getMat();
+    if (image.type() != CV_8UC1)
+    {
+        cv::cvtColor(image, image, COLOR_BGR2GRAY);
+    }
+    if (image.rows % 8 != 0)
+    {
+        size_t row_border = 8 - image.rows % 8;
+        size_t col_border = 0;
+        if (image.cols % 8 != 0)
+        {
+            col_border = 8 - image.cols % 8;
+        }
+        cv::copyMakeBorder(image, image, 0, row_border, 0, col_border, cv::BORDER_CONSTANT, cv::Scalar::all(0));
+    }
+
+    // 1.model inference
+    cv::dnn::Net model = dnn::readNetFromONNX(onnx_file);
+    if (model.empty())
+    {
+        CV_Error(Error::StsError, "The onnx file is invalid!");
+        return;
+    }
+    if (use_cuda)
+    {
+        CV_Assert(cv::cuda::getCudaEnabledDeviceCount() > 0);
+        model.setPreferableBackend(cv::dnn::Backend::DNN_BACKEND_CUDA);
+        model.setPreferableTarget(cv::dnn::Target::DNN_TARGET_CUDA);
+    }
+    cv::Mat blob;
+    cv::dnn::blobFromImage(image, blob, 1 / 255.0);
+    model.setInput(blob);
+    std::vector<Mat> output_blobs;
+    model.forward(output_blobs, model.getUnconnectedOutLayersNames());
+
+    // 2.extract keypoints
+    if (do_keypoints)
+    {
+        keypoints.clear();
+        int reserve_size = 2 * image.total() / 64;
+        keypoints.reserve(reserve_size);
+
+        cv::MatSize semi_points_size = output_blobs[1].size;
+        cv::Mat semi_points, confidence;
+        cv::transposeND(output_blobs[1], { 0, 2, 3, 1 }, semi_points);
+        semi_points = semi_points.reshape(65, { semi_points_size[2], semi_points_size[3] });
+        cv::exp(semi_points, confidence);  // softmax
+
+        const cv::Vec<float, 65> ones_vec = cv::Vec<float, 65>::ones();
+        auto _confidence_threshold_functor = [&keypoints, &ones_vec, this](cv::Vec<float, 65> &pixel, const int *position) -> void
+        {
+            std::lock_guard<std::mutex> locker(mutex_);
+            float cell_sum = pixel.dot(ones_vec);
+            for (int k = 0; k < 64; k++)
+            {
+                float candidate_confidence = pixel[k] / (cell_sum + (float)1e-5);
+                if (candidate_confidence > confidence_threshold)
+                {
+                    cv::Point corner = Point(position[1] * 8 + k % 8, position[0] * 8 + k / 8);
+                    keypoints.push_back(KeyPoint(corner, 7.f, -1, candidate_confidence));
+                }
+            }
+        };
+        confidence.forEach<Vec<float, 65>>(_confidence_threshold_functor);
+        // Remove keypoints out of mask region
+        cv::KeyPointsFilter::runByPixelsMask(keypoints, mask);
+        // Remove keypoints very close to the border
+        cv::KeyPointsFilter::runByImageBorder(keypoints, image.size(), edge_threshold);
+        // Nonmax suppression
+        runByFastNonmaxSuppression(keypoints, image.size(), nonmax_suppression_size);
+    }
+
+    // 3.extract descriptors
+    if (do_descriptors)
+    {
+        int keypoints_num = keypoints.size();
+        if (keypoints_num == 0)
+        {
+            _descriptors.release();
+            return;
+        }
+        _descriptors.create(keypoints_num, DESCRIPTOR_SIZE, CV_32F);  // Nx256
+        cv::Mat descriptors_mat = _descriptors.getMat();
+
+        cv::Mat semi_dense_descriptors;
+        cv::MatSize semi_descriptors_size = output_blobs[0].size;
+        semi_dense_descriptors = output_blobs[0].reshape(0, { semi_descriptors_size[1], semi_descriptors_size[2], semi_descriptors_size[3] });
+        // Interpolate
+        cv::parallel_for_(Range(0, keypoints_num), [&semi_dense_descriptors = std::as_const(semi_dense_descriptors), &keypoints, &descriptors_mat](const Range &range)
+        {
+            for (int n = range.start; n < range.end; n++)
+            {
+                auto pt = keypoints[n].pt;
+                float i = pt.y / 8.;
+                float j = pt.x / 8.;
+
+                // bilinear interpolation
+                const int neighbor_grid[4] = { floor(j - (float)1e-5), ceil(i), ceil(j), floor(i - (float)1e-5) };
+                const float w[4] = { j - neighbor_grid[0], neighbor_grid[1] - i, neighbor_grid[2] - j, i - neighbor_grid[3] };
+                float norm_factor = 0.;
+                for (int k = 0; k < DESCRIPTOR_SIZE; k++)
+                {
+                    uchar *p_desc = semi_dense_descriptors.data + k * semi_dense_descriptors.step.p[0]
+                        + neighbor_grid[3] * semi_dense_descriptors.step.p[1]
+                        + neighbor_grid[0] * semi_dense_descriptors.step.p[2];
+                    float el = w[1] * w[2] * (*(float*)p_desc)
+                        + w[2] * w[3] * (*(float*)(p_desc + semi_dense_descriptors.step.p[1]))
+                        + w[0] * w[3] * (*(float*)(p_desc + semi_dense_descriptors.step.p[1] + semi_dense_descriptors.step.p[2]))
+                        + w[0] * w[1] * (*(float*)(p_desc + semi_dense_descriptors.step.p[2]));
+                    norm_factor += el * el;
+                    (*descriptors_mat.ptr<float>(n, k)) = el;
+                }
+                for (int k = 0; k < DESCRIPTOR_SIZE; k++)
+                {
+                    (*descriptors_mat.ptr<float>(n, k)) /= sqrt(norm_factor) + 1e-5;
+                }
+            }
+        });
+    }
+}
+
+```
 
 ## 参考
 
-1. [^](https://zhuanlan.zhihu.com/p/683250038#ref_1_0)Harris C G , Stephens M J .A combined corner and edge detector[C]//Alvey vision conference.1988. [https://doi.org/10.5244/C.2.23](https://doi.org/10.5244/C.2.23)
-2. [^](https://zhuanlan.zhihu.com/p/683250038#ref_2_0)drawing-ellipse-from-eigenvalue-eigenvector  [https://math.stackexchange.com/questions/1447730/drawing-ellipse-from-eigenvalue-eigenvector](https://math.stackexchange.com/questions/1447730/drawing-ellipse-from-eigenvalue-eigenvector)
-3. [^](https://zhuanlan.zhihu.com/p/683250038#ref_3_0)Rosten E .Machine learning for high-speed corner detection[C]//European Conference on Computer Vision.Springer-Verlag, 2006. [https://doi.org/10.1007/11744023_34](https://doi.org/10.1007/11744023_34)
-4. [^](https://zhuanlan.zhihu.com/p/683250038#ref_4_0)ID3 Algorithm [https://en.wikipedia.org/wiki/ID3_algorithm](https://en.wikipedia.org/wiki/ID3_algorithm)
-5. [^](https://zhuanlan.zhihu.com/p/683250038#ref_5_0)Information Gain [https://en.wikipedia.org/wiki/Information_gain_(decision_tree)](https://en.wikipedia.org/wiki/Information_gain_(decision_tree))
-6. [^](https://zhuanlan.zhihu.com/p/683250038#ref_6_0)Mair E , Hager G D , Burschka D ,et al.Adaptive and Generic Corner Detection Based on the Accelerated Segment Test[C]//ECCV 2010;European conference on computer vision.2010. [https://link.springer.com/chapter/10.1007/978-3-642-15552-9_14](https://link.springer.com/chapter/10.1007/978-3-642-15552-9_14)
-7. [^](https://zhuanlan.zhihu.com/p/683250038#ref_7_0)what-is-phase-congruency [https://dsp.stackexchange.com/questions/22700/what-is-phase-congruency](https://dsp.stackexchange.com/questions/22700/what-is-phase-congruency)
-8. [^](https://zhuanlan.zhihu.com/p/683250038#ref_8_0)Kovesi P .Phase Congruency Detects Corners and Edges[C]//Dicta.2003 [https://www.peterkovesi.com/papers/phasecorners.pdf](https://www.peterkovesi.com/papers/phasecorners.pdf)
-9. [^](https://zhuanlan.zhihu.com/p/683250038#ref_9_0)Kovesi P .Image Features From Phase Congruency[J].The University of Western Australia, 1995(3). [https://www.semanticscholar.org/paper/Image-Features-from-Phase-Congruency-Kovesi/4d954ec7f1091cb1d6b18b1b1e656d583e7a1353](https://www.semanticscholar.org/paper/Image-Features-from-Phase-Congruency-Kovesi/4d954ec7f1091cb1d6b18b1b1e656d583e7a1353)
-10. [^](https://zhuanlan.zhihu.com/p/683250038#ref_10_0)An implementation of phase congruency image features detection: edges and corners. [https://github.com/RamilKadyrov/PhaseCongruency](https://github.com/RamilKadyrov/PhaseCongruency)
-11. [^](https://zhuanlan.zhihu.com/p/683250038#ref_11_0)Mokhtarian F , Suomela R .Robust image corner detection through curvature scale space[J].IEEE Computer Society, 1998(12). [https://link.springer.com/chapter/10.1007/978-94-017-0343-7_7](https://link.springer.com/chapter/10.1007/978-94-017-0343-7_7)
-12. [^](https://zhuanlan.zhihu.com/p/683250038#ref_12_0)Awrangjeb M , Lu G .Robust Image Corner Detection Based on the Chord-to-Point Distance Accumulation Technique[J].IEEE Transactions on Multimedia, 2008, 10(6):1059-1072.DOI:10.1109/TMM.2008.2001384. [https://www.semanticscholar.org/paper/Robust-Image-Corner-Detection-Based-on-the-Distance-Awrangjeb-Lu/3add640b10af15eb3272abfa95e62bb522ac175d](https://www.semanticscholar.org/paper/Robust-Image-Corner-Detection-Based-on-the-Distance-Awrangjeb-Lu/3add640b10af15eb3272abfa95e62bb522ac175d)
-13. [^](https://zhuanlan.zhihu.com/p/683250038#ref_13_0)ARCSS corner detector [https://www.mathworks.com/matlabcentral/fileexchange/33229-affine-resilient-curvature-scale-space-corner-detector](https://www.mathworks.com/matlabcentral/fileexchange/33229-affine-resilient-curvature-scale-space-corner-detector)
-14. [^](https://zhuanlan.zhihu.com/p/683250038#ref_14_0)CPDA corner detector [https://www.mathworks.com/matlabcentral/fileexchange/22390-robust-image-corner-detection-based-on-the-chord-to-point-distance-accumulation-technique?s_tid=srchtitle](https://www.mathworks.com/matlabcentral/fileexchange/22390-robust-image-corner-detection-based-on-the-chord-to-point-distance-accumulation-technique?s_tid=srchtitle)
-15. [^](https://zhuanlan.zhihu.com/p/683250038#ref_15_0)ABRAMENKO A A, KARKISHCHENKO A N. 2019. Applications of Algebraic Moments for Corner and Edge Detection for a Locally Angular Model\[J/OL\]. Pattern Recognition and Image Analysis, 29(1): 58-71. [https://doi.org/10.1134/S1054661819010024](https://doi.org/10.1134/S1054661819010024)
-16. [^](https://zhuanlan.zhihu.com/p/683250038#ref_16_0) GitHub. mr-abramenko/subpixel-corner-edge-detector: Subpixel corner and edge detector. [https://github.com/mr-abramenko/subpixel-corner-edge-detector](https://github.com/mr-abramenko/subpixel-corner-edge-detector)
-17. [^](https://zhuanlan.zhihu.com/p/683250038#ref_17_0)ZHANG W, SUN C, GAO Y. 2023. Image Intensity Variation Information for Interest Point Detection\[J/OL\]. IEEE Transactions on Pattern Analysis and Machine Intelligence, 45(8): 9883-9894. [https://doi.org/10.1109/TPAMI.2023.3240129](https://doi.org/10.1109/TPAMI.2023.3240129)
-18. [^](https://zhuanlan.zhihu.com/p/683250038#ref_18_0)Szeliski_Computer Vision Algorithms and Applications_2ndEd.Charpter3.2.3 page127-129 [https://szeliski.org/Book](https://szeliski.org/Book)
+[^1]: Harris C G , Stephens M J .A combined corner and edge detector[C]//Alvey vision conference.1988. [https://doi.org/10.5244/C.2.23](https://doi.org/10.5244/C.2.23)
+[^2]: drawing-ellipse-from-eigenvalue-eigenvector  [https://math.stackexchange.com/questions/1447730/drawing-ellipse-from-eigenvalue-eigenvector](https://math.stackexchange.com/questions/1447730/drawing-ellipse-from-eigenvalue-eigenvector)
+[^3]: Rosten E .Machine learning for high-speed corner detection[C]//European Conference on Computer Vision.Springer-Verlag, 2006. [https://doi.org/10.1007/11744023_34](https://doi.org/10.1007/11744023_34)
+[^4]: ID3 Algorithm [https://en.wikipedia.org/wiki/ID3_algorithm](https://en.wikipedia.org/wiki/ID3_algorithm)
+[^5]: Information Gain [https://en.wikipedia.org/wiki/Information_gain_(decision_tree)](https://en.wikipedia.org/wiki/Information_gain_(decision_tree))
+[^6]: Mair E , Hager G D , Burschka D ,et al.Adaptive and Generic Corner Detection Based on the Accelerated Segment Test[C]//ECCV 2010;European conference on computer vision.2010. [https://link.springer.com/chapter/10.1007/978-3-642-15552-9_14](https://link.springer.com/chapter/10.1007/978-3-642-15552-9_14)
+[^7]: what-is-phase-congruency [https://dsp.stackexchange.com/questions/22700/what-is-phase-congruency](https://dsp.stackexchange.com/questions/22700/what-is-phase-congruency)
+[^8]: Kovesi P .Phase Congruency Detects Corners and Edges[C]//Dicta.2003 [https://www.peterkovesi.com/papers/phasecorners.pdf](https://www.peterkovesi.com/papers/phasecorners.pdf)
+[^9]: Kovesi P .Image Features From Phase Congruency[J].The University of Western Australia, 1995(3). [https://www.semanticscholar.org/paper/Image-Features-from-Phase-Congruency-Kovesi/4d954ec7f1091cb1d6b18b1b1e656d583e7a1353](https://www.semanticscholar.org/paper/Image-Features-from-Phase-Congruency-Kovesi/4d954ec7f1091cb1d6b18b1b1e656d583e7a1353)
+[^10]: An implementation of phase congruency image features detection: edges and corners. [https://github.com/RamilKadyrov/PhaseCongruency](https://github.com/RamilKadyrov/PhaseCongruency)
+[^11]: Mokhtarian F , Suomela R .Robust image corner detection through curvature scale space[J].IEEE Computer Society, 1998(12). [https://link.springer.com/chapter/10.1007/978-94-017-0343-7_7](https://link.springer.com/chapter/10.1007/978-94-017-0343-7_7)
+[^12]: Awrangjeb M , Lu G .Robust Image Corner Detection Based on the Chord-to-Point Distance Accumulation Technique[J].IEEE Transactions on Multimedia, 2008, 10(6):1059-1072.DOI:10.1109/TMM.2008.2001384. [https://www.semanticscholar.org/paper/Robust-Image-Corner-Detection-Based-on-the-Distance-Awrangjeb-Lu/3add640b10af15eb3272abfa95e62bb522ac175d](https://www.semanticscholar.org/paper/Robust-Image-Corner-Detection-Based-on-the-Distance-Awrangjeb-Lu/3add640b10af15eb3272abfa95e62bb522ac175d)
+[^13]: ARCSS corner detector [https://www.mathworks.com/matlabcentral/fileexchange/33229-affine-resilient-curvature-scale-space-corner-detector](https://www.mathworks.com/matlabcentral/fileexchange/33229-affine-resilient-curvature-scale-space-corner-detector)
+[^14]: CPDA corner detector [https://www.mathworks.com/matlabcentral/fileexchange/22390-robust-image-corner-detection-based-on-the-chord-to-point-distance-accumulation-technique?s_tid=srchtitle](https://www.mathworks.com/matlabcentral/fileexchange/22390-robust-image-corner-detection-based-on-the-chord-to-point-distance-accumulation-technique?s_tid=srchtitle)
+[^15]: Abramenko A A, Karkishchenko A N. 2019. Applications of Algebraic Moments for Corner and Edge Detection for a Locally Angular Model\[J/OL\]. Pattern Recognition and Image Analysis, 29(1): 58-71. [https://doi.org/10.1134/S1054661819010024](https://doi.org/10.1134/S1054661819010024)
+[^16]: GitHub. mr-abramenko/subpixel-corner-edge-detector: Subpixel corner and edge detector. [https://github.com/mr-abramenko/subpixel-corner-edge-detector](https://github.com/mr-abramenko/subpixel-corner-edge-detector)
+[^17]: Zhang W, Sun C, Gao Y. 2023. Image Intensity Variation Information for Interest Point Detection\[J/OL\]. IEEE Transactions on Pattern Analysis and Machine Intelligence, 45(8): 9883-9894. [https://doi.org/10.1109/TPAMI.2023.3240129](https://doi.org/10.1109/TPAMI.2023.3240129)
+[^18]: Szeliski_Computer Vision Algorithms and Applications_2ndEd.Charpter3.2.3 page127-129 [https://szeliski.org/Book](https://szeliski.org/Book)
+[^19]: Detone D, Malisiewicz T, Rabinovich A. SuperPoint: Self-Supervised Interest Point Detection and Description[J].  2017. [https://doi.org/10.48550/arXiv.1712.07629](https://doi.org/10.48550/arXiv.1712.07629)
+[^20]: SuperPoint Weights File and Demo Script. [https://github.com/magicleap/SuperPointPretrainedNetwork](https://github.com/magicleap/SuperPointPretrainedNetwork)
+[^21]: 将PyTorch训练模型转换为ONNX. [https://learn.microsoft.com/zh-cn/windows/ai/windows-ml/tutorials/pytorch-convert-model](https://learn.microsoft.com/zh-cn/windows/ai/windows-ml/tutorials/pytorch-convert-model)
