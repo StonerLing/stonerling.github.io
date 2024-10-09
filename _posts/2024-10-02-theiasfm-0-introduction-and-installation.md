@@ -10,7 +10,7 @@ comments: true
 ---
 ## 1 TheiaSfM简介
 
-[TheiaSfM](http://www.theia-sfm.org/index.html) 是由 Chris Sweeney 开发的一款专注于结构从运动（Structure from Motion，简称 SfM）任务的计算机视觉库。它以可靠性、易用性和扩展性为核心特点，实现了包括多视图几何、位姿求解、特征提取与匹配、三维重建等关键算法。TheiaSfM 的代码风格清晰，外部依赖性低，这使得它在处理大规模 SfM 任务时表现出了优异的性能。项目的源代码已在 [Github](https://github.com/sweeneychris/Theia) 上开源，并且提供了详尽的 [API 文档](http://www.theia-sfm.org/api.html)。
+[TheiaSfM](http://www.theia-sfm.org) 是由 Chris Sweeney 开发的一款专注于结构从运动（Structure from Motion，简称 SfM）任务的计算机视觉库。它以可靠性、易用性和扩展性为核心特点，实现了包括多视图几何、位姿求解、特征提取与匹配、三维重建等关键算法。TheiaSfM 的代码风格清晰，外部依赖性低，这使得它在处理大规模 SfM 任务时表现出了优异的性能。项目的源代码已在 [Github](https://github.com/sweeneychris/Theia) 上开源，并且提供了详尽的 [API 文档](http://www.theia-sfm.org)。
 
 ## 2 TheiaSfM 安装
 
