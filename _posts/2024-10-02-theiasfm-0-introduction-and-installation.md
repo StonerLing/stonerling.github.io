@@ -10,11 +10,11 @@ comments: true
 ---
 ## 1 TheiaSfM简介
 
-[TheiaSfM](http://www.theia-sfm.org) 是由 Chris Sweeney 开发的一款专注于结构从运动（Structure from Motion，简称 SfM）任务的计算机视觉库。它以可靠性、易用性和扩展性为核心特点，实现了包括多视图几何、位姿求解、特征提取与匹配、三维重建等关键算法。TheiaSfM 的代码风格清晰，外部依赖性低，这使得它在处理大规模 SfM 任务时表现出了优异的性能。项目的源代码已在 [Github](https://github.com/sweeneychris/Theia) 上开源，并且提供了详尽的 [API 文档](http://www.theia-sfm.org)。
+TheiaSfM是由 Chris Sweeney 开发的一款专注于结构从运动（Structure from Motion，简称 SfM）任务的计算机视觉库。它以可靠性、易用性和扩展性为核心特点，实现了包括多视图几何、位姿求解、特征提取与匹配、三维重建等关键算法。TheiaSfM 的代码风格清晰，外部依赖性低，这使得它在处理大规模 SfM 任务时表现出了优异的性能。项目的源代码已在 [Github](https://github.com/sweeneychris/Theia) 上开源，并且提供了详尽的API文档[^1]。
 
 ## 2 TheiaSfM 安装
 
-与其他一些知名的三维重建库如 OpenMVG 和 Colmap 相比，TheiaSfM 的文档和资料相对较少[^1]。TheiaSfM 的实际依赖库不多，其中 glog、gflags 和 cereal 已经包含在项目内部，外部依赖仅有 OpenImageIO、Eigen 和 Ceres。Eigen 库只需引入头文件即可，Ceres 库的编译也相对简单。较为复杂的是 OpenImageIO 库的编译，因为它的版本众多，而网上的博客确定能够与 TheiaSfM 兼容的 OpenImageIO 版本是 1.7.17[^2]。此外，OpenImageIO 的依赖 OpenEXR 在 Windows 环境下的编译也相当具有挑战性。
+与其他一些知名的三维重建库如 OpenMVG 和 Colmap 相比，TheiaSfM 的文档和资料相对较少[^2]。TheiaSfM 的实际依赖库不多，其中 glog、gflags 和 cereal 已经包含在项目内部，外部依赖仅有 OpenImageIO、Eigen 和 Ceres。Eigen 库只需引入头文件即可，Ceres 库的编译也相对简单。较为复杂的是 OpenImageIO 库的编译，因为它的版本众多，而网上的博客确定能够与 TheiaSfM 兼容的 OpenImageIO 版本是 1.7.17[^3]。此外，OpenImageIO 的依赖 OpenEXR 在 Windows 环境下的编译也相当具有挑战性。
 
 ### 2.1 方法一：使用 vcpkg 安装
 
@@ -105,5 +105,6 @@ vcpkg install mpfr
 ```
 
 ## 参考
-[^1]: 库安装：TheiaSfM. [https://zhuanlan.zhihu.com/p/54112018](https://zhuanlan.zhihu.com/p/54112018)
-[^2]: theia-sfm配置文档. [https://zhuanlan.zhihu.com/p/38880542](https://zhuanlan.zhihu.com/p/38880542)
+[^1]: Theia文档. www.theia-sfm.org
+[^2]: 库安装：TheiaSfM. [https://zhuanlan.zhihu.com/p/54112018](https://zhuanlan.zhihu.com/p/54112018)
+[^3]: theia-sfm配置文档. [https://zhuanlan.zhihu.com/p/38880542](https://zhuanlan.zhihu.com/p/38880542)
