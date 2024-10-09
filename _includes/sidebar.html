@@ -43,7 +43,7 @@
   </nav>
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
-    {% unless site.theme_mode %}
+    <!-- {% unless site.theme_mode %}
       <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
         <i class="fas fa-adjust"></i>
       </button>
@@ -51,7 +51,7 @@
       {% if site.data.contact.size > 0 %}
         <span class="icon-border"></span>
       {% endif %}
-    {% endunless %}
+    {% endunless %} -->
 
     {% for entry in site.data.contact %}
       {% case entry.type %}
@@ -59,6 +59,10 @@
           {%- capture url -%}
             https://{{ entry.type }}.com/{{ site[entry.type].username }}
           {%- endcapture -%}
+        {% when 'zhihu'%}
+        {%- capture url -%}
+          https://{{ entry.type }}.com/people/{{ entry.id }}
+        {%- endcapture -%}
         {% when 'email' %}
           {% assign email = site.social.email | split: '@' %}
           {%- capture url -%}

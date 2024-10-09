@@ -1,10 +1,11 @@
 ---
 title: 角点检测算法总结
+# description: ——从Harris到SuperPoint
 date: 2024-09-15 21:30:00 +/-0800
 categories: [Computer Vision, Feature] 
 tags: [corner detection]
 author: stoner
-image: /assets/img/computer-vision/feature/corner-detetion-summary.jpg
+image: /assets/img/computer-vision/corner-detetion-summary.jpg
 math: true
 comments: true
 ---
@@ -44,7 +45,7 @@ Harris算法是对Moravec算法的改进[^1]，其所用的**自相关矩阵（a
 
 特征点一般用于与另一张图进行匹配，但我们无法预先获知某一点用于匹配时的稳定性，但我们可以判断该点在小范围内的**特异性**，方法如下。
 
-我们考虑图像 $$I$$ 以某一点 $$\mathbf x_c$$ 为中心的半径为 $$m$$ 的窗口 $$W_m$$ 下的邻域 $$\mathcal {N}$$ ，窗口 $$W_m$$ 发生一个微小的偏移 $$\Delta \mathbf u$$ 后， $$W_m$$ 下的另一邻域 $$\mathcal{N'}$$ 与 $$\mathcal N$$ 的差异。定义**自相关函数（auto-correlation function）**反映不同偏移下的邻域差异变化
+我们考虑图像 $I$ 以某一点 $\mathbf x_c$ 为中心的半径为 $m$ 的窗口 $W_m$ 下的邻域 $$\mathcal {N}$$ ，窗口 $$W_m$$ 发生一个微小的偏移 $$\Delta \mathbf u$$ 后， $$W_m$$ 下的另一邻域 $$\mathcal{N'}$$ 与 $$\mathcal N$$ 的差异。定义**自相关函数（auto-correlation function）**反映不同偏移下的邻域差异变化
 
 $$ E_{AC}(\mathbf x_c,\Delta \mathbf u)=\sum_i w(\mathbf{x}_{i})[I(\mathbf x_i+\Delta \mathbf u)-I(\mathbf x_i)]^2\tag{1.1} $$ 
 
@@ -330,6 +331,7 @@ s=\int_0^u|\dot{\boldsymbol{r}}(v)|dv\tag{5.2}
 $$
 
 那么，在 $$u$$ 处的切向和法向单位向量分别为：
+
 $$
 \begin{gathered} \boldsymbol{t}(u)=\frac{\dot{\boldsymbol{r}}}{|\dot{\boldsymbol{r}}|}=\left(\frac{\dot{x}}{\left(\dot{x}^{2}+\dot{y}^{2}\right)^{1/2}},\frac{\dot{y}}{\left(\dot{x}^{2}+\dot{y}^{2}\right)^{1/2}}\right) \\ \boldsymbol{n}(u)=\boldsymbol{t}^\perp(u)=\left(\frac{-\dot{y}}{(\dot{x}^{2}+\dot{y}^{2})^{1/2}},\frac{\dot{x}}{(\dot{x}^{2}+\dot{y}^{2})^{1/2}}\right)  \end{gathered}\tag{5.3}
 $$
@@ -456,6 +458,7 @@ $$
 $$
 
 从图6.3中不难看出： $$M_{01}=\iint\limits_Syf(x,y)dxdy=0$$ ，代入公式 $$(6.2)$$ 可得：
+
 $$
 \begin{aligned}\cos\theta&=\frac{m_{10}}{\sqrt{m_{01}^2+m_{10}^2}}\\\\\sin\theta&=\frac{m_{01}}{\sqrt{m_{01}^2+m_{10}^2}}\end{aligned}\tag{6.3}
 $$
@@ -481,6 +484,7 @@ $$
 $$
 \begin{gathered} l_{AB}:y_{1}(x)=\frac{\sqrt{R^{2}-t^{2}}}{t-p}(x-p), \\ l_{AC}:y_{2}(x)=-{\frac{\sqrt{R^{2}-t^{2}}}{t-p}}(x-p).  \end{gathered}\tag{6.6} 
 $$
+
 接下来具体计算各阶代数矩的值：
 
 $$ 
@@ -492,6 +496,7 @@ $$
 $$
 \begin{aligned} M_{10}&=-\frac{a-b}{3}\sqrt{R^{2}-t^{2}}(2R^{2}-pt-p^{2}), \\ M_{20}&=\frac{a+b}2\frac{\pi R^{4}}4 \\ &-(a-b)\Biggl[\frac{1}{6}\sqrt{R^{2}-t^{2}}\left(\frac{3}{2}R^{2}t-pt^{2}-tp^{2}-p^{3}\right) \\ &-\left.\frac{R^{4}}{4}\arcsin\frac{t}{R}\right], \\ M_{02}&=\frac{a+b}2\frac{\pi R^{4}}4 \\ &-(a-b)\biggl[\frac{1}{6}\sqrt{R^{2}-t^{2}}\biggl(pt^{2}-R^{2}p-\frac{3}{2}R^{2}t\biggr) \\ &-\left.\frac{R^{4}}{4}\arcsin\frac{t}{R}\right] \end{aligned}\tag{6.8} 
 $$
+
 观察公式 $$(6.7)$$ 和公式 $$(6.8)$$ 的各阶代数矩， $$M_{02}$$ 和 $$M_{20}$$ 分别减去 $$\frac{R^2}{4}M_{00}$$ 可以消去第一项，那么可以得到：
 
 $$ 
@@ -519,6 +524,7 @@ p=\frac{H+J}{2M_{10}}=\frac{2(M_{20}+M_{02})-R^2M_{00}}{M_{10}}\tag{6.12}
 $$
 
 根据 $$O^\prime$$ 在原坐标系下的坐标可以得到角点的转换后的坐标为：
+
 $$ 
 \begin{aligned}\hat{x}&=x+p\cos\theta\\ \hat{y}&=y+p\sin\theta \end{aligned}\tag{6.13}
 $$
@@ -617,7 +623,7 @@ $$
 \Upsilon_e(n_x,n_y)=\frac{\prod_{k=1}^K\lambda_k}{\sum_{k=1}^K\lambda_k+\varsigma}\tag{7.11}
 $$
 
- $$\Upsilon_e$$ 是局部极大值且大于一个阈值 $$T_c$$ 时即视为角点。
+ $\Upsilon_e$ 是局部极大值且大于一个阈值 $T_c$ 时即视为角点。
 
 ### 7.2 理论溯源
 
@@ -626,23 +632,23 @@ $$
 $$
 G_{\hat{\mathbf{u}}}=uG_x+vG_y=u\frac{\partial G}{\partial x}+v\frac{\partial G}{\partial y}\tag{7.12} $$
 
-式中， $$\hat{\mathbf{u}}=[cos \theta,sin \theta]^\top=[u,v]^\top$$ 为 $$\theta$$ 方向上的单位向量，代入后不难发现其与公式 $$（7.2）$$ 中的一阶高斯方向导数 $$FOGDD$$ 完全相同，也即 $$\phi_{\sigma,\theta}(x,y)=G_{\hat{\mathbf{u}}}$$ 。相应地，对标公式 $$(7.5)$$ 也有：
+式中， $\hat{\mathbf{u}}=[cos \theta,sin \theta]^\top=[u,v]^\top$ 为 $\theta$ 方向上的单位向量，代入后不难发现其与公式 $（7.2）$ 中的一阶高斯方向导数 $FOGDD$ 完全相同，也即 $\phi_{\sigma,\theta}(x,y)=G_{\hat{\mathbf{u}}}$ 。相应地，对标公式 $(7.5)$ 也有：
 
 $$ 
 \kappa_{\sigma}(\theta)=\mathbf{\hat{u}}\cdot\nabla(G*f)=\nabla_{\mathbf{\hat{u}}}(G*f)=(\nabla_{\mathbf{\hat{u}}}G)*f\tag{7.13} $$
 
-而二阶高斯方向导数 $$SOGDD$$ 则可定义为：
+而二阶高斯方向导数 $SOGDD$ 则可定义为：
 
  $$ G_{\hat{\mathbf{u}}\hat{\mathbf{u}}}=u^2G_{xx}+2uvG_{xy}+v^2G_{yy}\tag{7.14} $$
 
 ---
 
 
-### 8 SuperPoint
+## 8 SuperPoint
 
 SuperPoint[^19]利用由点线面等基本几何要素构成的虚拟数据集进行训练得到伪真值，辅以多样射影变换以提升前者提取的所谓MagicPoint的普适性，以此替代人工标注的过程。这里不对原理做赘述，SuperPoint的网络架构如下图所示：
 
-![图8.1 SuperPoint 编解码架构图](/assets/img/computer-vision/feature/superpoint-decoder.jpg)
+![图8.1 SuperPoint 编解码架构图](/assets/img/computer-vision/superpoint-decoder.jpg)
 _图8.1 SuperPoint 编解码架构图_
 
 接下来我们重点探讨怎么将官方的预训练模型[^20]在C++中进行调用。有多种推理框架，我们这里以OpenCV的DNN模块为例。首先需要将官方的pth权重文件转换为onnx格式[^21]，接下来就是读取这个onnx文件，进行模型推理，根据论文以及官方python代码从推理结果中提取角点特征。
@@ -715,12 +721,12 @@ void cv::SuperPoint_Impl::detectAndCompute(InputArray _image, InputArray _mask, 
                 float candidate_confidence = pixel[k] / (cell_sum + (float)1e-5);
                 if (candidate_confidence > confidence_threshold)
                 {
-                    cv::Point corner = Point(position[1] * 8 + k % 8, position[0] * 8 + k / 8);
+                    cv::Point corner = cv::Point(position[1] * 8 + k % 8, position[0] * 8 + k / 8);
                     keypoints.push_back(KeyPoint(corner, 7.f, -1, candidate_confidence));
                 }
             }
         };
-        confidence.forEach<Vec<float, 65>>(_confidence_threshold_functor);
+        confidence.forEach<cv::Vec<float, 65>>(_confidence_threshold_functor);
         // Remove keypoints out of mask region
         cv::KeyPointsFilter::runByPixelsMask(keypoints, mask);
         // Remove keypoints very close to the border

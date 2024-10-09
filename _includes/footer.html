@@ -48,6 +48,9 @@
       >Chirpy</a>
     {%- endcapture -%}
 
-    {{ site.data.locales[include.lang].meta | replace: ':PLATFORM', _platform | replace: ':THEME', _theme }}
+    {%- capture _palette -%}
+      <a href="https://Catppuccin.com" target="_blank" rel="noopener">Catppuccin</a>
+    {%- endcapture -%}
+    {{ site.data.locales[include.lang].meta | replace: ':PLATFORM', _platform | replace: ':THEME', _theme | replace: ':PALETTE', _palette }}
   </p>
 </footer>

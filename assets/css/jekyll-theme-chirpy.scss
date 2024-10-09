@@ -8,3 +8,236 @@
 ';
 
 /* append your custom style below */
+//This is a scss theme with catppuccin latte colors
+@mixin light-scheme {
+  $COLOR_BASE: 	#eff1f5;
+  $COLOR_MANTLE: #e6e9ef;
+  $COLOR_MAUVE: #8839ef;
+  $COLOR_SUBTEXT1: #5c5f77;
+  $COLOR_CRUST:#dce0e8;
+  $COLOR_SAPPHIRE:#209fb5;
+
+  #sidebar {
+    background-color:$COLOR_MANTLE;
+    .profile-wrapper:hover{
+      .site-title a{
+        color:$COLOR_MAUVE;
+      }
+    }
+    .site-subtitle{
+      //color:#dd7878;
+    }
+    .nav-item:hover {
+      background-color: $COLOR_CRUST;
+      a{
+        background-color: $COLOR_CRUST;
+        color:$COLOR_MAUVE;
+      }
+    }
+    .sidebar-bottom{
+      #mode-toggle :hover{
+        color:$COLOR_MAUVE;
+      }
+      a:hover {
+        color: $COLOR_MAUVE;
+      }
+    }
+  }
+  
+  #main-wrapper {
+    background-color: $COLOR_BASE;
+  
+    #topbar-wrapper {
+      background-color: $COLOR_MANTLE;
+      border-radius: 0 0 7px 7px;
+      #topbar {
+        color: $COLOR_SUBTEXT1;
+        #breadcrumb a {
+          color: $COLOR_SAPPHIRE;
+        }
+        #breadcrumb a:hover {
+          color: $COLOR_MAUVE;
+        }
+      }
+    }
+  
+    #search{
+      background-color: $COLOR_BASE;
+    }
+  
+    #panel-wrapper {
+      background-color: $COLOR_BASE;
+      .penal-heading{
+        color: $COLOR_SAPPHIRE;
+      }
+      a {
+        //color: $COLOR_SAPPHIRE;
+        :hover {
+          color: $COLOR_MAUVE !important;
+        }
+      }
+    }
+    
+    #post-list, .px-1 {
+      background-color: $COLOR_BASE;
+      padding: 15px 20px;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+  
+    .share-icons a:hover{
+      color: $COLOR_MAUVE;
+    }
+  
+    .post-navigation {
+      background: $COLOR_MANTLE;
+      border-radius: 10px;
+      .btn:hover {
+        background: #7287fd;
+        border-color: transparent;
+      }
+    }
+    .card-body {
+      background: $COLOR_MANTLE;
+      border-radius: 10px;
+    }
+    .card-body:hover {
+      background: #1c3c7a;
+    }
+  }
+  
+  footer {
+    background: $COLOR_BASE;
+    padding: 15px;
+  }
+}
+
+@mixin dark-scheme {
+  $COLOR_BASE: 	#1e1e2e;
+  $COLOR_MANTLE: #181825;
+  $COLOR_MAUVE: #cba6f7;
+  $COLOR_SUBTEXT1: #bac2de;
+  $COLOR_CRUST:#11111b;
+  $COLOR_SAPPHIRE:#74c7ec;
+
+  #sidebar {
+    background-color:$COLOR_MANTLE;
+    .profile-wrapper:hover{
+      .site-title a{
+        color:$COLOR_MAUVE;
+      }
+    }
+    .site-subtitle{
+      //color:#dd7878;
+    }
+    .nav-item:hover {
+      background-color: $COLOR_CRUST;
+      a{
+        background-color: $COLOR_CRUST;
+        color:$COLOR_MAUVE;
+      }
+    }
+    .sidebar-bottom{
+      #mode-toggle :hover{
+        color:$COLOR_MAUVE;
+      }
+      a:hover {
+        color: $COLOR_MAUVE;
+      }
+    }
+  }
+  
+  #main-wrapper {
+    background-color: $COLOR_BASE;
+  
+    #topbar-wrapper {
+      background-color: $COLOR_MANTLE;
+      border-radius: 0 0 7px 7px;
+      #topbar {
+        color: $COLOR_SUBTEXT1;
+        #breadcrumb a {
+          color: $COLOR_SAPPHIRE;
+        }
+        #breadcrumb a:hover {
+          color: $COLOR_MAUVE;
+        }
+      }
+    }
+  
+    #search{
+      background-color: $COLOR_BASE;
+    }
+  
+    #panel-wrapper {
+      background-color: $COLOR_BASE;
+      .penal-heading{
+        color: $COLOR_SAPPHIRE;
+      }
+      a {
+        //color: $COLOR_SAPPHIRE;
+        :hover {
+          color: $COLOR_MAUVE !important;
+        }
+      }
+    }
+    
+    #post-list, .px-1 {
+      background-color: $COLOR_BASE;
+      padding: 15px 20px;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+  
+    .share-icons a:hover{
+      color: $COLOR_MAUVE;
+    }
+  
+    .post-navigation {
+      background: $COLOR_MANTLE;
+      border-radius: 10px;
+      .btn:hover {
+        background: #7287fd;
+        border-color: transparent;
+      }
+    }
+    .card-body {
+      background: $COLOR_MANTLE;
+      border-radius: 10px;
+    }
+    .card-body:hover {
+      background: #1c3c7a;
+    }
+  }
+  
+  footer {
+    background: $COLOR_BASE;
+    padding: 15px;
+  }
+}
+
+html {
+  @media (prefers-color-scheme: light) {
+    @include light-scheme;
+    // &:not([data-mode]),
+    // &[data-mode='light'] {
+    //   @include light-scheme;
+    // }
+
+    // &[data-mode='dark'] {
+    //   @include dark-scheme;
+    // }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    @include dark-scheme;
+    // &:not([data-mode]),
+    // &[data-mode='dark'] {
+    //   @include dark-scheme;
+    // }
+
+    // &[data-mode='light'] {
+    //   @include light-scheme;
+    // }
+  }
+}
+
