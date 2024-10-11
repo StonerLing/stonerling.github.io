@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!trigger || !content) continue;
 
       let codeLines = (content.textContent.split('\n').length - 1) / 2; // 计算实际的代码行数
-      console.log(codeLines);
+      //console.log(codeLines);
 
       if (codeLines <= defaultOpenLines) {
         trigger.innerHTML = "收起";
