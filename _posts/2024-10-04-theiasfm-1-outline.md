@@ -1,6 +1,6 @@
 ---
 title: 探索TheiaSfM：1-概述
-description: TheiaSfM项目概览与GFlags, GTest, GLog简介
+description: An Overview of the TheiaSfM Project and Introductions to GFlags, GTest, and GLog
 date: 2024-10-04 14:54:00 +/-0800
 categories: [Computer Vision, SfM] 
 tags: [SfM, TheiaSfM, GFLags, GLog, GTest]
@@ -239,10 +239,10 @@ VLOG(2) << "I’m printed when you run the program with --v=2 or higher";
 
 `GLog`还提供`CHECK`宏进行运行时条件检查，不满足时直接终止程序。
 
-```
+```cpp
 CHECK(name == "Vincent") << "Error person!";
 CHECK_NE(1, 2) << ": The world must be ending!";
-CHECK_EQ(string("abc")[1], ’b’) << "That's strange!";
+CHECK_EQ(string("abc")[1], 'b') << "That's strange!";
 CHECK_NOTNULL(some_ptr) << "Empty pointer!";
 ```
 
