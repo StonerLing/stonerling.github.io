@@ -331,26 +331,23 @@ flowchart TD
     D --> G["reconstruction_builder(options, features_and_matches_database.get());"]
     G --> H["feature_extractor_and_matcher_->reset()"]
 
-    subgraph I1
-        direction LR
-        Interface@{ shape: lin-cyl, label: "//Interface: FeaturesAndMatchesDatabase" }
-        Interface --> Interface_1["CameraIntrinsicsPrior"]
-        Interface --> Interface_2["KeypointsAndDescriptors"]
-        Interface --> Interface_3["ImagePairMatch"]
-    end
-
-    subgraph I2
-        direction LR
-        implement@{ shape: lin-cyl, label: "//Implement: RocksDbFeaturesAndMatchesDatabase" }
-        implement --> implement_1["database_"]
-        implement --> implement_2["intrinsics_prior_handle_"]
-        implement --> implement_3["features_handle_"]
-        implement --> implement_4["matches_handle_"]
-    end
-    B -.- I1
-    I1 -.- I2
 ```
+`FeaturesAndMatchesDatabase`是基础类。
+```mermaid
+flowchart LR
+    Interface["//Interface: FeaturesAndMatchesDatabase"] --> Interface_1["CameraIntrinsicsPrior"]
+    Interface --> Interface_2["KeypointsAndDescriptors"]
+    Interface --> Interface_3["ImagePairMatch"]
 
+```
+`RocksDbFeaturesAndMatchesDatabase`是对应的实现类。
+```mermaid
+flowchart LR
+    implement["//Implement: RocksDbFeaturesAndMatchesDatabase"] --> implement_1["database_"]
+    implement --> implement_2["intrinsics_prior_handle_"]
+    implement --> implement_3["features_handle_"]
+    implement --> implement_4["matches_handle_"]
+```
 ## 4 Eigen库简介
 TODO:
 
