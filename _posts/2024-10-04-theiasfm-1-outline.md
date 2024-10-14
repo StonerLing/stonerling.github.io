@@ -132,7 +132,6 @@ program -height -age 20 -name "Vincent"
 `GFlags`编译好后在CMake中配置
 
 ```cmake
-set(gflags_DIR <prefix>/lib/cmake/gflags)
 find_package(gflags REQUIRED)
 target_link_libraries(program gflags::gflags)
 ```
@@ -189,14 +188,13 @@ GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
 --images= 
 --output_matches_file= 
 ```
-TheiaSfM将`GFLAGS_NAMESPACE`用宏替换为了`THEIA_GFLAGS_NAMESPACE`，但`GLog`直接用的`google::`，暂不清楚如此处理的原因。
+TheiaSfM将`GFLAGS_NAMESPACE`用宏替换为了`THEIA_GFLAGS_NAMESPACE`，但`GLog`直接用的`google::`，暂不清楚如此处理的原因。可能是处理Gflags在不同版本时的命名空间不一致的问题。
 
 `GFlags`更多细节和注意事项请查阅官方文档。
 ## 3 GLog简介
 `GLog`全称Google Logging Library，由Google出品的日志库。类似地在官方Github[^3]下载源码编译后由CMake引入：
 
 ```cmake
-set(glog_DIR <prefix>/lib/cmake/glog)
 find_package(glog REQUIRED)
 target_link_libraries(program glog::glog)
 ```
@@ -250,7 +248,6 @@ CHECK_NOTNULL(some_ptr) << "Empty pointer!";
 ## 4 GTest简介
 类似的，`GTest`从Github官方[^5]下载源码编译后，在`CMake`中引入
 ```cmake
-set(gtest_DIR, <prefix>/lib/cmake/gtest)
 find_package(GTest)
 target_link_libraries(program GTest::gtest GTest::gtest_main)
 ```
