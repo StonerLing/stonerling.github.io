@@ -2,7 +2,7 @@
 title: Hello World
 date: 2024-09-13 16:49:00 +/-0800
 categories: [Personal Writings, Wandering Words] 
-# Wandering Words（杂文）, Mindful Musings（哲思）, Scholarly Scribbles（笔记）, Rhapsodic Ramblings（幻想）, Linguistic Bridges（译文）, Insightful Pages（书评）
+# Wandering Words(杂文), Mindful Musings(哲思), Scholarly Scribbles(笔记), Rhapsodic Ramblings(幻想), Linguistic Bridges(译文), Insightful Pages(书评)
 tags: [helloworld]     # TAG names should always be lowercase
 author: stoner
 image: assets/img/personal-writings/hello-world.jpg
